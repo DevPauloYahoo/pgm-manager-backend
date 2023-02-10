@@ -6,3 +6,27 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Visitor {
+  id String @id @default(uuid())
+  name String
+  document String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+  visits Visit[]
+  
+  @@map("visitors")
+}
+
+model Visit {
+  id String @id @default(uuid())
+  badge String
+  secretary String
+  status Boolean? @default(false)
+  visitor Visitor? @relation(fields: [visitor_id], references: [id])
+  visitor_id String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+  
+  @@map("visits")
+}
