@@ -8,8 +8,8 @@ datasource db {
 }
 
 model Visitor {
-  id         String   @id @default(uuid())
-  name       String
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(200)
   document   String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt()
@@ -24,7 +24,7 @@ model Visit {
   secretary  String
   status     Boolean? @default(false)
   visitor    Visitor? @relation(fields: [visitor_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  visitor_id String?
+  visitor_id String?  @db.Uuid
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 

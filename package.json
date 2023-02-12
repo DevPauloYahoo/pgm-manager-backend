@@ -4,9 +4,12 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
+    "build": "tsup src",
+    "start": "node dist/server.js",
     "dev": "nodemon",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev --skip-seed"
+    "prisma:migrate": "prisma migrate dev --skip-seed",
+    "prisma:push": "prisma push"
   },
   "keywords": [],
   "author": "",
