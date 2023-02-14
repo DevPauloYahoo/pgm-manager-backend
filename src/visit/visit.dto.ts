@@ -1,12 +1,8 @@
-export type createVisitDto = {
-  badge: string;
-  secretary: string;
-  visitor_id?: string;
-};
+export type createVisitDto = Omit<Visit, 'id'>;
 
 export type Visit = {
-  id?: string;
+  id: string;
   badge: string;
   secretary: string;
-  visitor_id?: string;
+  visitor_id: string;
 };

@@ -1,20 +1,9 @@
-import { PrismaClient } from '@prisma/client';
-
+import { prismaClient } from '../../prisma/config/prisma.client';
 import { createVisitDto } from './visit.dto';
 
-const prisma = new PrismaClient();
-
 export const createVisit = (visitDto: createVisitDto) => {
-  return prisma.visit.create({
-    data: {
-      badge: visitDto.badge,
-      secretary: visitDto.secretary,
-      visitor: {
-        connect: {
-          id: visitDto.visitor_id,
-        },
-      },
-    },
+  return prismaClient.visit.create({
+    data: visitDto,
     select: {
       id: true,
       badge: true,
@@ -31,11 +20,14 @@ export const createVisit = (visitDto: createVisitDto) => {
 };
 
 export const getAllVisits = () => {
-  return prisma.visit.findMany({
+  return prismaClient.visit.findMany({
     select: {
       id: true,
       badge: true,
+      status: true,
       secretary: true,
+      created_at: true,
+      updated_at: true,
       visitor: {
         select: {
           id: true,
@@ -44,5 +36,6 @@ export const getAllVisits = () => {
         },
       },
     },
+    where: { status: false },
   });
 };

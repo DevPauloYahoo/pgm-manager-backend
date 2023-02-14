@@ -6,6 +6,7 @@ const visitorRoutes = Router();
 
 visitorRoutes
   .post('/visitors', visitorController.saveVisitor)
-  .get('/visitors', visitorController.listAll);
+  .get('/visitors', visitorController.listAll)
+  .get('/visitors/:id', visitorController.findOne);
 
 export default visitorRoutes;

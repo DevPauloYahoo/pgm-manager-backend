@@ -1,17 +1,15 @@
-import { PrismaClient } from '@prisma/client';
+import { prismaClient } from '../../../prisma/config/prisma.client';
+import { TypeCreateVisitorDto } from '../dto/visitor.dto';
 
-import { createVisitorDto } from '../dto/visitor.dto';
-
-const prisma = new PrismaClient();
-
-export const createVisitor = ({ name, document, visit }: createVisitorDto) => {
-  console.log(visit);
-  return prisma.visitor.create({
+export const createVisitor = ({
+  visits,
+  ...visitorDto
+}: TypeCreateVisitorDto) => {
+  return prismaClient.visitor.create({
     data: {
-      name,
-      document,
+      ...visitorDto,
       visits: {
-        create: [visit],
+        create: visits,
       },
     },
     select: {
@@ -30,7 +28,7 @@ export const createVisitor = ({ name, document, visit }: createVisitorDto) => {
 };
 
 export const getAllVisitors = () => {
-  return prisma.visitor.findMany({
+  return prismaClient.visitor.findMany({
     select: {
       id: true,
       name: true,
@@ -41,10 +39,14 @@ export const getAllVisitors = () => {
           badge: true,
           secretary: true,
           status: true,
-          created_at: true,
-          updated_at: true,
         },
       },
     },
+  });
+};
+
+export const getOneVisitor = async (id: string) => {
+  return await prismaClient.visitor.findUnique({
+    where: { id },
   });
 };

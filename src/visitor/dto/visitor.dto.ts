@@ -1,7 +1,11 @@
-import { Visit } from '../../visit';
-
-export type createVisitorDto = {
+export type TypeCreateVisitorDto = {
+  id: string;
   name: string;
   document: string;
-  visit: Visit;
+  visits: TypeVisitToVisitor[];
+};
+
+export type TypeVisitToVisitor = {
+  badge: string;
+  secretary: string;
 };

@@ -2,8 +2,11 @@ import { Request, Response } from 'express';
 
 import { visitService } from './index';
 
-export const saveVisit = async (req: Request, res: Response) => {
-  const visit = await visitService.createVisit(req.body);
+export const createVisit = async (req: Request, res: Response) => {
+  const { ...visitDto } = req.body;
+  const visit = await visitService.createVisit({
+    ...visitDto,
+  });
   return res.status(201).json(visit);
 };
 
