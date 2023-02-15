@@ -1,6 +1,7 @@
-import * as visitorController from './controller/visitor.controller';
-import * as visitorDto from './dto/visitor.dto';
-import * as visitorService from './service/visitor.service';
-import visitorRoutes from './visitor.routes';
+import * as visitorController from './visitor.controller';
+import * as visitorService from './visitor.service';
 
-export { visitorController, visitorService, visitorDto, visitorRoutes };
+export * from './visitor.dto';
+export * from './visitor.routes';
+
+export { visitorController, visitorService };

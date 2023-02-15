@@ -1,12 +1,13 @@
 import { Router } from 'express';
 
+import { resolver } from '../helpers';
 import { visitorController } from '../visitor';
 
 const visitorRoutes = Router();
 
 visitorRoutes
-  .post('/visitors', visitorController.saveVisitor)
-  .get('/visitors', visitorController.listAll)
-  .get('/visitors/:id', visitorController.findOne);
+  .post('/visitors', resolver(visitorController.saveVisitor))
+  .get('/visitors', resolver(visitorController.listAll))
+  .get('/visitors/:id', resolver(visitorController.findOne));
 
 export default visitorRoutes;

@@ -1,5 +1,5 @@
-import { prismaClient } from '../../../prisma/config/prisma.client';
-import { TypeCreateVisitorDto } from '../dto/visitor.dto';
+import { prismaClient } from '../../prisma/config/prisma.client';
+import { TypeCreateVisitorDto } from './visitor.dto';
 
 export const createVisitor = ({
   visits,
@@ -42,11 +42,14 @@ export const getAllVisitors = () => {
         },
       },
     },
+    orderBy: {
+      name: 'asc',
+    },
   });
 };
 
-export const getOneVisitor = async (id: string) => {
-  return await prismaClient.visitor.findUnique({
+export const getOneVisitor = (id: string) => {
+  return prismaClient.visitor.findUnique({
     where: { id },
   });
 };

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
-import { visitorService } from '../index';
+import { NotFoundError } from '../helpers';
+import { visitorService } from './index';
 
 export const saveVisitor = async (req: Request, res: Response) => {
   const visitor = await visitorService.createVisitor(req.body);
@@ -13,9 +14,12 @@ export const listAll = async (req: Request, res: Response) => {
 };
 
 export const findOne = async (req: Request, res: Response) => {
-  const visitor = await visitorService.getOneVisitor(req.params['id']);
+  const { id } = req.params;
+  const visitor = await visitorService.getOneVisitor(id);
+
   if (!visitor) {
-    return res.status(404).json({ message: 'Visitante não encontrado' });
+    throw new NotFoundError(`Visitante não encontrado para o ID: ${id}`);
   }
+  
   return res.status(200).json(visitor);
 };

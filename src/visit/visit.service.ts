@@ -19,6 +19,37 @@ export const createVisit = (visitDto: createVisitDto) => {
   });
 };
 
+export const createVisitToVisitor = (
+  visitDto: createVisitDto,
+  visitorId: string,
+) => {
+  return prismaClient.visit.create({
+    data: {
+      ...visitDto,
+      visitor_id: visitorId,
+    },
+    select: {
+      id: true,
+      badge: true,
+      secretary: true,
+      visitor: {
+        select: {
+          id: true,
+          name: true,
+          document: true,
+        },
+      },
+    },
+  });
+};
+
+export const updateStatus = async (id: string) => {
+  return prismaClient.visit.update({
+    where: { id },
+    data: { status: true },
+  });
+};
+
 export const getAllVisits = () => {
   return prismaClient.visit.findMany({
     select: {
@@ -36,6 +67,15 @@ export const getAllVisits = () => {
         },
       },
     },
-    where: { status: false },
+    // where: { status: false },
+    orderBy: {
+      created_at: 'desc',
+    },
+  });
+};
+
+export const getOneVisit = (id: string) => {
+  return prismaClient.visit.findUnique({
+    where: { id },
   });
 };
