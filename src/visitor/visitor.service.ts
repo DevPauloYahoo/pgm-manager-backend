@@ -27,7 +27,7 @@ export const createVisitor = ({
   });
 };
 
-export const getAllVisitors = () => {
+export const getAllVisitors = (search: string, skip: number, limit: number) => {
   return prismaClient.visitor.findMany({
     select: {
       id: true,
@@ -42,9 +42,27 @@ export const getAllVisitors = () => {
         },
       },
     },
+    where: {
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+        {
+          document: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+      ],
+    },
     orderBy: {
       name: 'asc',
     },
+    skip,
+    take: limit,
   });
 };
 
