@@ -1,5 +1,5 @@
-import { prismaClient } from '../../prisma/config/prisma.client';
-import { createVisitDto } from './visit.dto';
+import {prismaClient} from '../../prisma/config/prisma.client';
+import {createVisitDto} from './visit.dto';
 
 export const createVisit = (visitDto: createVisitDto) => {
   return prismaClient.visit.create({
@@ -45,12 +45,12 @@ export const createVisitToVisitor = (
 
 export const updateStatus = async (id: string) => {
   return prismaClient.visit.update({
-    where: { id },
-    data: { status: true },
+    where: {id},
+    data: {status: true},
   });
 };
 
-export const getAllVisits = () => {
+export const getAllVisits = (status: boolean | undefined, skip: number, limit: number) => {
   return prismaClient.visit.findMany({
     select: {
       id: true,
@@ -67,15 +67,17 @@ export const getAllVisits = () => {
         },
       },
     },
-    // where: { status: false },
+    where: {status},
     orderBy: {
       created_at: 'desc',
     },
+    skip,
+    take: limit,
   });
 };
 
 export const getOneVisit = (id: string) => {
   return prismaClient.visit.findUnique({
-    where: { id },
+    where: {id},
   });
 };

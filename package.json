@@ -1,5 +1,5 @@
 {
-  "name": "setup-node-ts-prisma-es-prettier",
+  "name": "pgm-manager-backend",
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",

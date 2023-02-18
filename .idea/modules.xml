@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/setup-node-ts-prisma-es-prettier.iml" filepath="$PROJECT_DIR$/setup-node-ts-prisma-es-prettier.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pgm-manager-backend.iml" filepath="$PROJECT_DIR$/pgm-manager-backend.iml" />
     </modules>
   </component>
 </project>
