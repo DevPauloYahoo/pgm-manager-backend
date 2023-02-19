@@ -1,8 +1,6 @@
-export type createVisitDto = Omit<Visit, 'id'>;
-
-export type Visit = {
+export interface VisitDto {
   id: string;
   badge: string;
   secretary: string;
   visitor_id: string;
-};
+}

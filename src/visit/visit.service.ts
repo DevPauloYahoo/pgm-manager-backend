@@ -1,7 +1,7 @@
-import {prismaClient} from '../../prisma/config/prisma.client';
-import {createVisitDto} from './visit.dto';
+import { prismaClient } from '../../prisma/config/prisma.client';
+import { TypeCreateVisit } from '../@types';
 
-export const createVisit = (visitDto: createVisitDto) => {
+export const createVisit = (visitDto: TypeCreateVisit) => {
   return prismaClient.visit.create({
     data: visitDto,
     select: {
@@ -20,7 +20,7 @@ export const createVisit = (visitDto: createVisitDto) => {
 };
 
 export const createVisitToVisitor = (
-  visitDto: createVisitDto,
+  visitDto: TypeCreateVisit,
   visitorId: string,
 ) => {
   return prismaClient.visit.create({
@@ -45,12 +45,16 @@ export const createVisitToVisitor = (
 
 export const updateStatus = async (id: string) => {
   return prismaClient.visit.update({
-    where: {id},
-    data: {status: true},
+    where: { id },
+    data: { status: true },
   });
 };
 
-export const getAllVisits = (status: boolean | undefined, skip: number, limit: number) => {
+export const getAllVisits = (
+  status: boolean | undefined,
+  skip: number,
+  limit: number,
+) => {
   return prismaClient.visit.findMany({
     select: {
       id: true,
@@ -67,7 +71,7 @@ export const getAllVisits = (status: boolean | undefined, skip: number, limit: n
         },
       },
     },
-    where: {status},
+    where: { status },
     orderBy: {
       created_at: 'desc',
     },
@@ -78,6 +82,6 @@ export const getAllVisits = (status: boolean | undefined, skip: number, limit: n
 
 export const getOneVisit = (id: string) => {
   return prismaClient.visit.findUnique({
-    where: {id},
+    where: { id },
   });
 };

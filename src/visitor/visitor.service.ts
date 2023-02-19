@@ -1,10 +1,7 @@
 import { prismaClient } from '../../prisma/config/prisma.client';
-import { TypeCreateVisitorDto } from './visitor.dto';
+import { TypeCreateVisitor } from '../@types';
 
-export const createVisitor = ({
-  visits,
-  ...visitorDto
-}: TypeCreateVisitorDto) => {
+export const createVisitor = ({ visits, ...visitorDto }: TypeCreateVisitor) => {
   return prismaClient.visitor.create({
     data: {
       ...visitorDto,

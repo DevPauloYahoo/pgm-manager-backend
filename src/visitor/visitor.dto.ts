@@ -1,11 +1,8 @@
-export type TypeCreateVisitorDto = {
+import { TypeVisit } from '../@types';
+
+export interface VisitorDto {
   id: string;
   name: string;
   document: string;
-  visits: TypeVisitToVisitor[];
-};
-
-export type TypeVisitToVisitor = {
-  badge: string;
-  secretary: string;
-};
+  visits: TypeVisit[];
+}

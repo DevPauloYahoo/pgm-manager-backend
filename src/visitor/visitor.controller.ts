@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 
 import { prismaClient } from '../../prisma/config/prisma.client';
+import { TypeVisitorPaginator } from '../@types';
 import { NotFoundError } from '../helpers';
-import { createVisitorSchema, visitorService } from './index';
+import { createVisitorSchema, VisitorDto, visitorService } from './index';
 
 export const saveVisitor = async (req: Request, res: Response) => {
   createVisitorSchema.parse(req.body);
@@ -18,24 +19,21 @@ export const listAll = async (req: Request, res: Response) => {
   const limit = +(req.query.limit as string) || 10;
   const skip = (page - 1) * limit;
 
-  const [visitors, total] = await prismaClient.$transaction([
+  const [visitors, totalItems] = await prismaClient.$transaction([
     visitorService.getAllVisitors(search, skip, limit),
     prismaClient.visitor.count(),
   ]);
 
-  const totalPages = Math.ceil(total / limit);
-  const lastPage: boolean = page === totalPages;
-  const firstPage: boolean = page === 1;
+  // const totalPages: number = Math.ceil(total / limit);
 
-  return res.status(200).json({
-    total,
-    totalPages,
+  const visitorResponse: TypeVisitorPaginator<VisitorDto> = {
+    content: visitors,
     currentPage: page,
-    itemPerPage: limit,
-    firstPage,
-    lastPage,
-    data: visitors,
-  });
+    itemsPerPage: limit,
+    totalItems,
+  };
+
+  return res.status(200).json(visitorResponse);
 };
 
 export const findOne = async (req: Request, res: Response) => {
