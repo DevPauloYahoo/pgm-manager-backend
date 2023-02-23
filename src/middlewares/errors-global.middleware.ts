@@ -25,9 +25,11 @@ export const errorsGlobalMiddleware = (
   }
 
   if (error instanceof PrismaClientKnownRequestError) {
-    return res
-      .status(401)
-      .json({ message: 'Erro do prisma', errorCode: error.code });
+    return res.status(401).json({
+      message: 'Erro do prisma',
+      errorCode: error.code,
+      errorMessage: error.message,
+    });
   }
 
   console.log(error);

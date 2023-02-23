@@ -51,6 +51,7 @@ export const updateStatus = async (id: string) => {
 };
 
 export const getAllVisits = (
+  search: string,
   status: boolean | undefined,
   skip: number,
   limit: number,
@@ -71,7 +72,27 @@ export const getAllVisits = (
         },
       },
     },
-    where: { status },
+    where: {
+      status,
+      AND: {
+        visitor: {
+          OR: [
+            {
+              name: {
+                contains: search,
+                mode: 'insensitive',
+              },
+            },
+            {
+              document: {
+                contains: search,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
+      },
+    },
     orderBy: {
       created_at: 'desc',
     },
@@ -83,5 +104,27 @@ export const getAllVisits = (
 export const getOneVisit = (id: string) => {
   return prismaClient.visit.findUnique({
     where: { id },
+  });
+};
+
+export const findByStatusBadgeSecretary = (
+  badge: string,
+  secretary: string,
+) => {
+  return prismaClient.visit.findFirst({
+    where: {
+      status: false,
+      badge,
+      secretary,
+    },
+    select: {
+      badge: true,
+      status: true,
+      visitor: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
 };

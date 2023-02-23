@@ -1,12 +1,25 @@
 import { Request, Response } from 'express';
 
 import { prismaClient } from '../../prisma/config/prisma.client';
-import { TypeVisitorPaginator } from '../@types';
+import { TypeIsExistsCPF, TypeVisitorPaginator } from '../@types';
 import { NotFoundError } from '../helpers';
-import { createVisitorSchema, VisitorDto, visitorService } from './index';
+import {
+  createVisitorSchema,
+  createVisitorWithVisitSchema,
+  validationCPFNumber,
+  validationCPFString,
+  VisitorDto,
+  visitorService,
+} from './index';
 
 export const saveVisitor = async (req: Request, res: Response) => {
-  createVisitorSchema.parse(req.body);
+  const { visit } = req.body;
+
+  if (visit) {
+    createVisitorWithVisitSchema.parse(req.body);
+  } else {
+    createVisitorSchema.parse(req.body);
+  }
 
   const visitor = await visitorService.createVisitor(req.body);
 
@@ -43,6 +56,23 @@ export const findOne = async (req: Request, res: Response) => {
   if (!visitorFound) {
     throw new NotFoundError(`Visitante não encontrado para o ID: ${id}`);
   }
+
+  return res.status(200).json(visitorFound);
+};
+
+export const findByCPF = async (req: Request, res: Response) => {
+  const cpfParam = String(req.query.cpf || '');
+
+  validationCPFNumber.parse(+cpfParam);
+  validationCPFString.parse(cpfParam);
+
+  const visitorFound: TypeIsExistsCPF = await visitorService.findByCPF(
+    cpfParam,
+  );
+
+  // if (!visitorFound) {
+  //   throw new NotFoundError('Não encontrado')
+  // }
 
   return res.status(200).json(visitorFound);
 };

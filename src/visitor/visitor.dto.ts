@@ -4,5 +4,5 @@ export interface VisitorDto {
   id: string;
   name: string;
   document: string;
-  visits: TypeVisit[];
+  visit?: TypeVisit;
 }

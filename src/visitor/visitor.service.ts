@@ -1,12 +1,12 @@
 import { prismaClient } from '../../prisma/config/prisma.client';
 import { TypeCreateVisitor } from '../@types';
 
-export const createVisitor = ({ visits, ...visitorDto }: TypeCreateVisitor) => {
+export const createVisitor = ({ visit, ...visitorDto }: TypeCreateVisitor) => {
   return prismaClient.visitor.create({
     data: {
       ...visitorDto,
       visits: {
-        create: visits,
+        create: visit,
       },
     },
     select: {
@@ -66,5 +66,12 @@ export const getAllVisitors = (search: string, skip: number, limit: number) => {
 export const getOneVisitor = (id: string) => {
   return prismaClient.visitor.findUnique({
     where: { id },
+  });
+};
+
+export const findByCPF = (document: string) => {
+  return prismaClient.visitor.findFirst({
+    where: { document },
+    select: { document: true, name: true },
   });
 };

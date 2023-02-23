@@ -8,6 +8,10 @@ const visitRoutes = Router();
 visitRoutes
   .post('/visits', resolver(visitController.createVisit))
   .get('/visits', resolver(visitController.findAll))
+  .get(
+    '/visits/badge_exists',
+    resolver(visitController.findByStatusBadgeSecretary),
+  )
   .post('/visits/:id', resolver(visitController.createVisitToVisitor))
   .get('/visits/:id', resolver(visitController.findOne))
   .patch('/visits/:id', resolver(visitController.updateStatus));

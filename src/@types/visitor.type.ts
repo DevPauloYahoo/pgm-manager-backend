@@ -9,3 +9,8 @@ export type TypeVisitorPaginator<T> = {
   currentPage: number;
 };
 type Content<T> = Array<T>;
+
+export type TypeIsExistsCPF = {
+  document: string;
+  name: string;
+} | null;
