@@ -43,9 +43,9 @@ export const createVisitToVisitor = (
   });
 };
 
-export const updateStatus = async (id: string) => {
+export const updateStatus = async (visitId: string) => {
   return prismaClient.visit.update({
-    where: { id },
+    where: { id: visitId },
     data: { status: true },
   });
 };
