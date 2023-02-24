@@ -128,3 +128,24 @@ export const findByStatusBadgeSecretary = (
     },
   });
 };
+
+export async function getByStatusAndVisitorId(visitorId: string) {
+  return prismaClient.visit.findFirst({
+    where: {
+      status: false,
+      visitor: {
+        id: visitorId,
+      }
+    },
+    select: {
+      id: true,
+      status: true,
+      visitor: {
+        select: {
+          name: true
+        }
+      }
+    }
+  })
+}
+

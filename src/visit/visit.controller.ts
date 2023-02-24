@@ -71,6 +71,7 @@ export const findAll = async (req: Request, res: Response) => {
   ]);
 
   // const totalPages = Math.ceil(total / limit);
+  
   const visitsResponse: TypeVisitPaginator<object> = {
     content: visits,
     currentPage: page,
@@ -109,3 +110,16 @@ export const findByStatusBadgeSecretary = async (
 
   return res.status(200).json(visitFound);
 };
+
+export const findVisitByStatusAndVisitorId = async (req: Request, res: Response) => {
+  const visitorId = req.params.id;
+  
+  const visitFound =  await visitService.getByStatusAndVisitorId(visitorId);
+
+  if (!visitFound) {
+    throw new NotFoundError(`Atendimento não encontrado`);
+  }
+  
+  return res.status(200).json(visitFound)
+  //
+}
