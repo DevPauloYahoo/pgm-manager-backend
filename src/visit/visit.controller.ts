@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 
 import { prismaClient } from '../../prisma/config/prisma.client';
-import { TypeVisitPaginator } from '../@types';
+import {
+  TypeVisitByBadgeResponse,
+  TypeVisitByVisitorResponse,
+  TypeVisitPaginator,
+} from '../@types';
 import { NotFoundError } from '../helpers';
 import { visitService } from './index';
 import {
@@ -71,7 +75,7 @@ export const findAll = async (req: Request, res: Response) => {
   ]);
 
   // const totalPages = Math.ceil(total / limit);
-  
+
   const visitsResponse: TypeVisitPaginator<object> = {
     content: visits,
     currentPage: page,
@@ -96,30 +100,39 @@ export const findOne = async (req: Request, res: Response) => {
 export const findByStatusBadgeSecretary = async (
   req: Request,
   res: Response,
-) => {
+): Promise<Response<TypeVisitByBadgeResponse>> => {
   const { badge, secretary } = req.query;
 
-  const visitFound = await visitService.findByStatusBadgeSecretary(
+  const visitFound = await visitService.getByStatusBadgeSecretary(
     badge as string,
     secretary as string,
   );
 
-  // if (!visitFound) {
-  //   return res.status(404).json({ isBadgeExists: false });
-  // }
+  if (!visitFound) {
+    throw new NotFoundError(`Crachá Nº ${badge} não está em uso`);
+  }
 
-  return res.status(200).json(visitFound);
+  return res.status(200).json({ statusVisit: true, visitId: visitFound.id });
 };
 
-export const findVisitByStatusAndVisitorId = async (req: Request, res: Response) => {
+export const findVisitByStatusAndVisitorId = async (
+  req: Request,
+  res: Response,
+): Promise<Response<TypeVisitByVisitorResponse>> => {
   const visitorId = req.params.id;
-  
-  const visitFound =  await visitService.getByStatusAndVisitorId(visitorId);
+
+  const visitFound = await visitService.getByStatusAndVisitorId(visitorId);
 
   if (!visitFound) {
-    throw new NotFoundError(`Atendimento não encontrado`);
+    return res.status(404).json({ status: false });
   }
-  
-  return res.status(200).json(visitFound)
-  //
-}
+
+  const { visitor, secretary, badge } = visitFound;
+
+  return res.status(200).json({
+    status: true,
+    visitorName: visitor.name,
+    secretaryName: secretary,
+    badgeNumber: badge,
+  });
+};

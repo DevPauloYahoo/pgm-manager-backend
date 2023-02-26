@@ -107,10 +107,7 @@ export const getOneVisit = (id: string) => {
   });
 };
 
-export const findByStatusBadgeSecretary = (
-  badge: string,
-  secretary: string,
-) => {
+export const getByStatusBadgeSecretary = (badge: string, secretary: string) => {
   return prismaClient.visit.findFirst({
     where: {
       status: false,
@@ -118,13 +115,7 @@ export const findByStatusBadgeSecretary = (
       secretary,
     },
     select: {
-      badge: true,
-      status: true,
-      visitor: {
-        select: {
-          name: true,
-        },
-      },
+      id: true,
     },
   });
 };
@@ -135,17 +126,16 @@ export async function getByStatusAndVisitorId(visitorId: string) {
       status: false,
       visitor: {
         id: visitorId,
-      }
+      },
     },
     select: {
-      id: true,
-      status: true,
+      secretary: true,
+      badge: true,
       visitor: {
         select: {
-          name: true
-        }
-      }
-    }
-  })
+          name: true,
+        },
+      },
+    },
+  });
 }
-

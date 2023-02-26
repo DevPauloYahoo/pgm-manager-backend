@@ -72,6 +72,6 @@ export const getOneVisitor = (id: string) => {
 export const findByCPF = (document: string) => {
   return prismaClient.visitor.findFirst({
     where: { document },
-    select: { document: true, name: true },
+    select: { document: true },
   });
 };

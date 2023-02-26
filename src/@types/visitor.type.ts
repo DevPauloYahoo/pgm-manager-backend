@@ -10,7 +10,13 @@ export type TypeVisitorPaginator<T> = {
 };
 type Content<T> = Array<T>;
 
-export type TypeIsExistsCPF = {
-  document: string;
-  name: string;
-} | null;
+export type TypeIsExistsCPF =
+  | {
+      document: string;
+    }
+  | TypeErrorResponse
+  | null;
+
+type TypeErrorResponse = {
+  message: string;
+};

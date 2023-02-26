@@ -10,3 +10,15 @@ export type TypeVisitPaginator<T> = {
   currentPage: number;
 };
 type Content<T> = Array<T>;
+
+export type TypeVisitByVisitorResponse = {
+  status: boolean;
+  visitorName?: string;
+  secretaryName?: string;
+  badgeNumber?: string;
+};
+
+export type TypeVisitByBadgeResponse = {
+  visitId?: string;
+  statusVisit: boolean;
+};

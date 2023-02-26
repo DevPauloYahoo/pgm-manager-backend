@@ -69,9 +69,9 @@ export const findByCPF = async (req: Request, res: Response) => {
   const visitorFound: TypeIsExistsCPF = await visitorService.findByCPF(
     cpfParam,
   );
-
+  //
   // if (!visitorFound) {
-  //   throw new NotFoundError('Não encontrado')
+  //   return res.status(404).json({ message: 'Error' });
   // }
 
   return res.status(200).json(visitorFound);
