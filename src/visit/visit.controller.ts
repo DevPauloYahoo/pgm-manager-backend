@@ -72,12 +72,18 @@ export const findAll = async (req: Request, res: Response) => {
   ]);
 
   // const totalPages = Math.ceil(total / limit);
+  let itemsTotal;
+  if (limit < visits.length) {
+    itemsTotal = totalItems
+  } else {
+    itemsTotal = visits.length
+  }
 
   const visitsResponse: TypeVisitPaginator<object> = {
     content: visits,
     currentPage: page,
     itemsPerPage: limit,
-    totalItems,
+    totalItems: itemsTotal,
   };
 
   return res.status(200).json(visitsResponse);
