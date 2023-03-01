@@ -56,21 +56,18 @@ export const updateStatus = async (req: Request, res: Response) => {
 
 export const findAll = async (req: Request, res: Response) => {
   const search = String(req.query.search || '');
-  const status = String(req.query.status || '');
+  const status = Boolean(req.query.status || false);
   const page = +(req.query.page as string) || 1;
   const limit = +(req.query.limit as string) || 10;
   const skip = (page - 1) * limit;
 
-  let statusQuery = true;
-  if (status === '') {
-    statusQuery = false;
-  }
-
-  // let status;
-  // if (param !== '') status = param.toLowerCase() === 'true';
+  // let statusQuery = true;
+  // if (status === '') {
+  //   statusQuery = false;
+  // }
 
   const [visits, totalItems] = await prismaClient.$transaction([
-    visitService.getAllVisits(search, statusQuery, skip, limit),
+    visitService.getAllVisits(search, status, skip, limit),
     prismaClient.visit.count(),
   ]);
 
@@ -109,7 +106,7 @@ export const findByStatusBadgeSecretary = async (
   );
 
   if (!visitFound) {
-    throw new NotFoundError(`Crachá Nº ${badge} não está em uso`);
+    return res.status(200).json({ statusVisit: false, visitId: '' });
   }
 
   return res.status(200).json({ statusVisit: true, visitId: visitFound.id });
@@ -124,7 +121,12 @@ export const findVisitByStatusAndVisitorId = async (
   const visitFound = await visitService.getByStatusAndVisitorId(visitorId);
 
   if (!visitFound) {
-    return res.status(404).json({ status: false });
+    return res.status(200).json({
+      status: false,
+      visitorName: '',
+      secretaryName: '',
+      badgeNumber: '', 
+    });
   }
 
   const { visitor, secretary, badge } = visitFound;

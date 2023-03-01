@@ -52,7 +52,7 @@ export const updateStatus = async (visitId: string) => {
 
 export const getAllVisits = (
   search: string,
-  status: boolean | undefined,
+  status: string | boolean,
   skip: number,
   limit: number,
 ) => {
@@ -73,7 +73,7 @@ export const getAllVisits = (
       },
     },
     where: {
-      status,
+      status: status as boolean,
       AND: {
         visitor: {
           OR: [
