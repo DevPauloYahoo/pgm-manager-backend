@@ -1,4 +1,4 @@
-import { VisitDto } from '../visit';
+import {VisitDto} from '../visit';
 
 export type TypeCreateVisit = Omit<VisitDto, 'id'>;
 export type TypeVisit = Omit<VisitDto, 'id' | 'visitor_id'>;
@@ -20,5 +20,6 @@ export type TypeVisitByVisitorResponse = {
 
 export type TypeVisitByBadgeResponse = {
   visitId?: string;
+  badgeVisit: string;
   statusVisit: boolean;
 };
