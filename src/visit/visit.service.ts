@@ -1,5 +1,5 @@
-import {prismaClient} from '../../prisma/config/prisma.client';
-import {TypeCreateVisit} from '../@types';
+import { prismaClient } from '../../prisma/config/prisma.client';
+import { TypeCreateVisit } from '../@types';
 
 export const createVisit = (visitDto: TypeCreateVisit) => {
   return prismaClient.visit.create({
@@ -45,8 +45,8 @@ export const createVisitToVisitor = (
 
 export const updateStatus = async (visitId: string) => {
   return prismaClient.visit.update({
-    where: {id: visitId},
-    data: {status: true},
+    where: { id: visitId },
+    data: { status: true },
   });
 };
 
@@ -103,7 +103,7 @@ export const getAllVisits = (
 
 export const getOneVisit = (id: string) => {
   return prismaClient.visit.findUnique({
-    where: {id},
+    where: { id },
   });
 };
 
@@ -116,7 +116,7 @@ export const getByStatusBadgeSecretary = (badge: string, secretary: string) => {
     },
     select: {
       id: true,
-      badge: true
+      badge: true,
     },
   });
 };
@@ -140,3 +140,14 @@ export async function getByStatusAndVisitorId(visitorId: string) {
     },
   });
 }
+
+export const getBadgesBySecretary = (secretary: string) =>
+  prismaClient.visit.findMany({
+    where: {
+      status: false,
+      secretary,
+    },
+    select: {
+      badge: true,
+    },
+  });

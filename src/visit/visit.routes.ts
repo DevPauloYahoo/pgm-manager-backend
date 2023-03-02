@@ -12,7 +12,11 @@ visitRoutes
     '/visits/badge_exists',
     resolver(visitController.findByStatusBadgeSecretary),
   )
-  .get('/visits/by_visitor/:id', resolver(visitController.findVisitByStatusAndVisitorId))
+  .get('/visits/all_badges', resolver(visitController.findBadgesBySecretary))
+  .get(
+    '/visits/by_visitor/:id',
+    resolver(visitController.findVisitByStatusAndVisitorId),
+  )
   .post('/visits/:id', resolver(visitController.createVisitToVisitor))
   .get('/visits/:id', resolver(visitController.findOne))
   .patch('/visits/:id', resolver(visitController.updateStatus));
