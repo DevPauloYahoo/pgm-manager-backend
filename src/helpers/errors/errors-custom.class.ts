@@ -1,6 +1,6 @@
 import { Response } from 'express';
 
-import { ErrorsZod } from '../../@types/errors-zod';
+import { ErrorsZod } from '../../@types';
 import { ApiErrors } from './api-errors.class';
 
 export class BadRequestError extends ApiErrors {

@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { ZodIssue } from 'zod';
 
-import { ErrorsZod } from '../../@types/errors-zod';
+import { ErrorsZod } from '../../@types';
 import { BadRequestValidationZod } from './errors-custom.class';
 
 export const errorsValidationZod = (errorsZod: ZodIssue[], res: Response) => {

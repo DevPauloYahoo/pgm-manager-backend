@@ -8,11 +8,11 @@ datasource db {
 }
 
 model Visitor {
-  id         String   @id @default(uuid()) @db.Uuid
   name       String   @db.VarChar(200)
   document   String
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt()
+  updated_at DateTime @updatedAt
+  id         String   @id @db.Uuid
   visits     Visit[]
 
   @@map("visitors")
@@ -23,10 +23,44 @@ model Visit {
   badge      String
   secretary  String
   status     Boolean? @default(false)
-  visitor    Visitor @relation(fields: [visitor_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  visitor_id String  @db.Uuid
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  visitor_id String   @db.Uuid
+  visitor    Visitor  @relation(fields: [visitor_id], references: [id], onDelete: Cascade)
 
   @@map("visits")
+}
+
+model User {
+  id         String         @id @default(uuid())
+  name       String
+  email      String         @unique
+  password   String
+  created_at DateTime       @default(now())
+  updated_at DateTime       @updatedAt
+  roles      UsersToRoles[]
+
+  @@map("users")
+}
+
+model Role {
+  id         String         @id @default(uuid())
+  name       String         @unique
+  created_at DateTime       @default(now())
+  updated_at DateTime       @updatedAt
+  users      UsersToRoles[]
+
+  @@map("roles")
+}
+
+model UsersToRoles {
+  userId String
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@id([userId, roleId])
+  @@index([userId], map: "idx_user_id")
+  @@index([roleId], map: "idx_role_id")
+  @@map("users_roles")
 }
