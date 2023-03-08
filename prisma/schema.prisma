@@ -8,11 +8,11 @@ datasource db {
 }
 
 model Visitor {
-  name       String   @db.VarChar(200)
+  id         String   @id @default(uuid())
+  name       String
   document   String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  id         String   @id @db.Uuid
   visits     Visit[]
 
   @@map("visitors")
@@ -25,7 +25,7 @@ model Visit {
   status     Boolean? @default(false)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  visitor_id String   @db.Uuid
+  visitor_id String
   visitor    Visitor  @relation(fields: [visitor_id], references: [id], onDelete: Cascade)
 
   @@map("visits")
