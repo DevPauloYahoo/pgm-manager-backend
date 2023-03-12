@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 
-import { singInSchema } from './sign-in.schema';
+import { signInService } from './sign-in.service';
 
 export const signIn = async (req: Request, res: Response) => {
-  singInSchema.parse(req.body);
+  const { username, password } = req.body;
 
-  const { email, password } = req.body;
+  const result = await signInService(username, password);
 
-  res.status(200).json({ email: email, password: password });
+  return res.status(200).json(result.data);
 };
