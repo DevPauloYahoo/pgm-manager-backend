@@ -10,7 +10,7 @@ import {JsonWebTokenError, TokenExpiredError, verify} from 'jsonwebtoken';
 const SECRET_KEY =
   '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt3p6Y4epRUSWsLMpS9esdtvCelMJx3MnHUMIAFgB4vB+oU3Eb1uDDlRuTMYhzOb2abQJSfYQUdQCo1qBwZMqvxkJ3ws+N89uPjGLGaPVuH8cTlFXWH/r1f+6bfol1NcpPoS0Bd7hsbcJWDUxLQ+5L6ZKFutTTOIy/T2YNkYr/sJ23PPYge2gYk4kKkFEhqQjK7yZQgy8dedmHvexNBZSWrYgBexy3LMhaLzyqI9okecrO0It0Y/I2RDskAzVUWujB/ElDzoomlipEb/M5kfrUpDwJcuaqh629zNqpZPSeR/8VE7T/8ZLeRGH2sWcaqkJWcqAawBKqrSwBHgRLfR5UQIDAQAB\n-----END PUBLIC KEY-----';
 
-interface Root {
+interface PayloadResponse {
   username: string;
   email: string;
   resource_access: ResourceAccess;
@@ -48,7 +48,7 @@ export function AuthMiddleware(userRoles: string[]) {
           .json({ message: 'Token inválido. Acesso negado' });
       }
 
-      const result: Root = {
+      const result: PayloadResponse = {
         username: payload.preferred_username,
         email: payload.email,
         resource_access: payload.resource_access,
