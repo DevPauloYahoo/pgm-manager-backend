@@ -21,6 +21,12 @@ export class UnauthorizedError extends ApiErrors {
   }
 }
 
+export class UnauthenticateError extends ApiErrors {
+  constructor(message: string) {
+    super(message, 403);
+  }
+}
+
 export class BadRequestValidationZod {
   constructor(data: ErrorsZod[], res: Response) {
     return res.status(400).json(data);

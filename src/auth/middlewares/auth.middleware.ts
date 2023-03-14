@@ -1,14 +1,8 @@
 import {NextFunction, Request, Response} from 'express';
 import {JsonWebTokenError, TokenExpiredError, verify} from 'jsonwebtoken';
 
-// const options: StrategyOptions = {
-//   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-//   secretOrKey:
-//     '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt3p6Y4epRUSWsLMpS9esdtvCelMJx3MnHUMIAFgB4vB+oU3Eb1uDDlRuTMYhzOb2abQJSfYQUdQCo1qBwZMqvxkJ3ws+N89uPjGLGaPVuH8cTlFXWH/r1f+6bfol1NcpPoS0Bd7hsbcJWDUxLQ+5L6ZKFutTTOIy/T2YNkYr/sJ23PPYge2gYk4kKkFEhqQjK7yZQgy8dedmHvexNBZSWrYgBexy3LMhaLzyqI9okecrO0It0Y/I2RDskAzVUWujB/ElDzoomlipEb/M5kfrUpDwJcuaqh629zNqpZPSeR/8VE7T/8ZLeRGH2sWcaqkJWcqAawBKqrSwBHgRLfR5UQIDAQAB\n-----END PUBLIC KEY-----',
-// };
-
 const SECRET_KEY =
-  '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt3p6Y4epRUSWsLMpS9esdtvCelMJx3MnHUMIAFgB4vB+oU3Eb1uDDlRuTMYhzOb2abQJSfYQUdQCo1qBwZMqvxkJ3ws+N89uPjGLGaPVuH8cTlFXWH/r1f+6bfol1NcpPoS0Bd7hsbcJWDUxLQ+5L6ZKFutTTOIy/T2YNkYr/sJ23PPYge2gYk4kKkFEhqQjK7yZQgy8dedmHvexNBZSWrYgBexy3LMhaLzyqI9okecrO0It0Y/I2RDskAzVUWujB/ElDzoomlipEb/M5kfrUpDwJcuaqh629zNqpZPSeR/8VE7T/8ZLeRGH2sWcaqkJWcqAawBKqrSwBHgRLfR5UQIDAQAB\n-----END PUBLIC KEY-----';
+  '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjFalxwZAg6Vy0GJ6h2Gl7b3OJcKkWPZtaovbTMogEcjQE0mCj/pUjQzZq//zfg4Ch63p9eglIXxiCKY0JjdMTY8YTtIqHGH7G+Z8yeK8BlOmqEPzy8x9bEPNIAcQHb3mhp2BsI4tOm7dSkXYVGcwLbNKUBE/DzNpHG2AS3f89DFRu81k/99yGu7BxVytVtE0HmCTg18PDsgKqBJ++aIUYBjHmKhFUBZzVLLSCRIdqoIt5Nxnedy+TzjvCp9/nNL74R2GlpMKPb/oBesrJK/blq1Ti3r+PZHicz6yuQLnsWpX87iUHiH0lJ0n0Z43LrKIUh9a59zR0qW3/SrT3lq/6wIDAQAB\n-----END PUBLIC KEY-----';
 
 interface PayloadResponse {
   username: string;
@@ -75,16 +69,3 @@ export function AuthMiddleware(userRoles: string[]) {
     });
   };
 }
-
-// export default new JwtStrategy(options, async (payload, done) => {
-//   try {
-//     const response = {
-//       name: payload.name,
-//       username: payload.preferred_username,
-//       email: payload.email,
-//     };
-//     return done(response);
-//   } catch (e) {
-//     return done(e);
-//   }
-// });

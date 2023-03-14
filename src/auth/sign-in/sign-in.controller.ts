@@ -19,6 +19,8 @@ export const signIn = async (req: Request, res: Response) => {
 
   res.header('Access-Control-Expose-Headers', 'x-access-token');
   res.set('x-access-token', JSON.stringify(token));
+  
+  console.log('DATA PAYLOAD',data);
 
   return res.status(200).json({ message: 'Login successful' });
 };

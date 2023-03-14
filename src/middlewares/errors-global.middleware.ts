@@ -1,8 +1,9 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import {AxiosError} from "axios";
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
-import { ApiErrors, errorsValidationZod } from '../helpers';
+import {ApiErrors, errorsValidationZod, UnauthorizedError} from '../helpers';
 
 export const errorsGlobalMiddleware = (
   error: Error & Partial<ApiErrors>,
@@ -30,6 +31,16 @@ export const errorsGlobalMiddleware = (
       errorCode: error.code,
       errorMessage: error.message,
     });
+  }
+  
+  if (error instanceof AxiosError) {
+    if (error.code === '401'){
+      return new UnauthorizedError('Acesso negado')
+    }
+
+    if (error.code === '403'){
+      return new UnauthorizedError('Usuário não autenticado')
+    }
   }
 
   console.log(error);
