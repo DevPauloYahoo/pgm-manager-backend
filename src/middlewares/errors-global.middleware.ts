@@ -1,9 +1,12 @@
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import {AxiosError} from "axios";
+import {
+  PrismaClientKnownRequestError,
+  PrismaClientInitializationError,
+} from '@prisma/client/runtime/library';
+import { AxiosError } from 'axios';
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
-import {ApiErrors, errorsValidationZod, UnauthorizedError} from '../helpers';
+import { ApiErrors, errorsValidationZod, UnauthorizedError } from '../helpers';
 
 export const errorsGlobalMiddleware = (
   error: Error & Partial<ApiErrors>,
@@ -25,24 +28,41 @@ export const errorsGlobalMiddleware = (
     return errorsValidationZod(error.issues, res);
   }
 
-  if (error instanceof PrismaClientKnownRequestError) {
-    return res.status(401).json({
-      message: 'Erro do prisma',
-      errorCode: error.code,
-      errorMessage: error.message,
+  if (error instanceof PrismaClientInitializationError) {
+    return res.status(500).json({
+      title: 'PrismaClientInitializationError',
+      message: 'Erro na base de dados',
     });
   }
-  
+
+  if (error instanceof PrismaClientKnownRequestError) {
+    return res.status(401).json({
+      title: 'PrismaClientKnownRequestError',
+      errorCode: error.code,
+      message: error.message,
+    });
+  }
+
   if (error instanceof AxiosError) {
-    if (error.code === '401'){
-      return new UnauthorizedError('Acesso negado')
+    if (error.code === 'ECONNREFUSED') {
+      return res
+        .status(500)
+        .json({ message: 'Conexão com banco de dados falhou' });
     }
 
-    if (error.code === '403'){
-      return new UnauthorizedError('Usuário não autenticado')
+    if (error.code === 'ERR_BAD_REQUEST') {
+      return res.status(400).json({ message: 'Credenciais inválidas' });
+    }
+
+    if (error.code === '401') {
+      return new UnauthorizedError('Acesso negado');
+    }
+
+    if (error.code === '403') {
+      return new UnauthorizedError('Usuário não autenticado');
     }
   }
 
-  console.log(error);
+  console.log('STACK TRACE', error.code);
   return res.status(statusCode).json({ message: message });
 };

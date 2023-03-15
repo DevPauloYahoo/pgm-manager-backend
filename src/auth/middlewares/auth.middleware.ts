@@ -1,8 +1,7 @@
-import {NextFunction, Request, Response} from 'express';
-import {JsonWebTokenError, TokenExpiredError, verify} from 'jsonwebtoken';
+import { NextFunction, Request, Response } from 'express';
+import { JsonWebTokenError, TokenExpiredError, verify } from 'jsonwebtoken';
 
-const SECRET_KEY =
-  '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjFalxwZAg6Vy0GJ6h2Gl7b3OJcKkWPZtaovbTMogEcjQE0mCj/pUjQzZq//zfg4Ch63p9eglIXxiCKY0JjdMTY8YTtIqHGH7G+Z8yeK8BlOmqEPzy8x9bEPNIAcQHb3mhp2BsI4tOm7dSkXYVGcwLbNKUBE/DzNpHG2AS3f89DFRu81k/99yGu7BxVytVtE0HmCTg18PDsgKqBJ++aIUYBjHmKhFUBZzVLLSCRIdqoIt5Nxnedy+TzjvCp9/nNL74R2GlpMKPb/oBesrJK/blq1Ti3r+PZHicz6yuQLnsWpX87iUHiH0lJ0n0Z43LrKIUh9a59zR0qW3/SrT3lq/6wIDAQAB\n-----END PUBLIC KEY-----';
+const SECRET_KEY = process.env.PUBLIC_KEY || '';
 
 interface PayloadResponse {
   username: string;

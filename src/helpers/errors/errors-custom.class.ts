@@ -21,7 +21,7 @@ export class UnauthorizedError extends ApiErrors {
   }
 }
 
-export class UnauthenticateError extends ApiErrors {
+export class UnauthenticatedError extends ApiErrors {
   constructor(message: string) {
     super(message, 403);
   }
