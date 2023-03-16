@@ -1,6 +1,5 @@
 import { Router } from 'express';
 
-import { AuthMiddleware } from '../auth/middlewares/auth.middleware';
 import { resolver } from '../helpers';
 import { visitController } from './index';
 
@@ -8,7 +7,7 @@ const visitRoutes = Router();
 
 visitRoutes
   .post('/visits', resolver(visitController.createVisit))
-  .get('/visits', AuthMiddleware(['ADMIN']), resolver(visitController.findAll))
+  .get('/visits', resolver(visitController.findAll))
   .get(
     '/visits/badge_exists',
     resolver(visitController.findByStatusBadgeSecretary),
