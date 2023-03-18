@@ -19,14 +19,15 @@ type PgmManager = {
 
 export function AuthMiddleware(userRoles: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const { authorization } = req.headers;
-    if (!authorization) {
+    const access_token = req.headers['x-access-token'] as string;
+
+    if (!access_token) {
       return res
         .status(401)
         .json({ message: 'Usuário não logado. Acesso não autorizado' });
     }
 
-    const token = authorization.substring(7).trim();
+    const token = access_token.substring(7).trim();
 
     verify(token, SECRET_KEY, (error, payload: any) => {
       if (error instanceof TokenExpiredError) {
