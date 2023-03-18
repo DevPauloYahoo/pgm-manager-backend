@@ -12,6 +12,16 @@ visitRoutes
     AuthMiddleware(['USER', 'ADMIN']),
     resolver(visitController.createVisit),
   )
+  .post(
+    '/visits/:id',
+    AuthMiddleware(['USER', 'ADMIN']),
+    resolver(visitController.createVisitToVisitor),
+  )
+  .patch(
+    '/visits/:id',
+    AuthMiddleware(['USER', 'ADMIN']),
+    resolver(visitController.updateStatus),
+  )
   .get(
     '/visits',
     AuthMiddleware(['USER', 'ADMIN', 'GUEST']),
@@ -27,20 +37,10 @@ visitRoutes
     AuthMiddleware(['USER', 'ADMIN', 'GUEST']),
     resolver(visitController.findVisitByStatusAndVisitorId),
   )
-  .post(
-    '/visits/:id',
-    AuthMiddleware(['USER', 'ADMIN']),
-    resolver(visitController.createVisitToVisitor),
-  )
   .get(
     '/visits/:id',
     AuthMiddleware(['USER', 'ADMIN', 'GUEST']),
     resolver(visitController.findOne),
-  )
-  .patch(
-    '/visits/:id',
-    AuthMiddleware(['USER', 'ADMIN']),
-    resolver(visitController.updateStatus),
   );
 
 export default visitRoutes;
