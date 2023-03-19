@@ -6,7 +6,12 @@ import { AxiosError } from 'axios';
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
-import { ApiErrors, errorsValidationZod, UnauthorizedError } from '../helpers';
+import {
+  ApiErrors,
+  errorsValidationZod,
+  UnauthenticatedError,
+  UnauthorizedError,
+} from '../helpers';
 
 export const errorsGlobalMiddleware = (
   error: Error & Partial<ApiErrors>,
@@ -39,9 +44,9 @@ export const errorsGlobalMiddleware = (
   if (error instanceof PrismaClientKnownRequestError) {
     if (error.code === '1001') {
       return res.status(500).json({
-        title: 'Erro na base de dados',
+        title: 'PrismaClientKnownRequestError',
         errorCode: error.code,
-        message: error.message,
+        message: 'Conexão com banco de dados falhou',
       });
     } else {
       return res.status(401).json({
@@ -54,9 +59,11 @@ export const errorsGlobalMiddleware = (
 
   if (error instanceof AxiosError) {
     if (error.code === 'ECONNREFUSED') {
-      return res
-        .status(500)
-        .json({ message: 'Conexão com banco de dados falhou' });
+      return res.status(500).json({
+        title: 'KeycloakConnectionError',
+        errorCode: 500,
+        message: 'Conexão com banco de dados falhou',
+      });
     }
 
     if (error.code === 'ERR_BAD_REQUEST') {
@@ -64,11 +71,11 @@ export const errorsGlobalMiddleware = (
     }
 
     if (error.code === '401') {
-      return new UnauthorizedError('Acesso negado');
+      return new UnauthenticatedError('Usuário autenticado');
     }
 
     if (error.code === '403') {
-      return new UnauthorizedError('Usuário não autenticado');
+      return new UnauthorizedError('Usuário não autorizado');
     }
   }
 
