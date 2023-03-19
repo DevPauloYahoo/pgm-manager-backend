@@ -43,24 +43,24 @@ var BadRequestError = class extends ApiErrors {
     super(message, 400);
   }
 };
+var BadRequestValidationZod = class {
+  constructor(data, res) {
+    return res.status(400).json(data);
+  }
+};
 var NotFoundError = class extends ApiErrors {
   constructor(message) {
     super(message, 404);
   }
 };
-var UnauthorizedError = class extends ApiErrors {
+var UnauthenticatedError = class extends ApiErrors {
   constructor(message) {
     super(message, 401);
   }
 };
-var UnauthenticatedError = class extends ApiErrors {
+var UnauthorizedError = class extends ApiErrors {
   constructor(message) {
     super(message, 403);
-  }
-};
-var BadRequestValidationZod = class {
-  constructor(data, res) {
-    return res.status(400).json(data);
   }
 };
 // Annotate the CommonJS export names for ESM import in node:

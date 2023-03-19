@@ -42,7 +42,7 @@ export const errorsGlobalMiddleware = (
   }
 
   if (error instanceof PrismaClientKnownRequestError) {
-    if (error.code === '1001') {
+    if (error.code === 'P1001') {
       return res.status(500).json({
         title: 'PrismaClientKnownRequestError',
         errorCode: error.code,

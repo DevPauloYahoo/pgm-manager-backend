@@ -57,19 +57,24 @@ var resolver = (handleFn) => {
 };
 
 // src/helpers/errors/errors-custom.class.ts
+var BadRequestValidationZod = class {
+  constructor(data, res) {
+    return res.status(400).json(data);
+  }
+};
 var NotFoundError = class extends ApiErrors {
   constructor(message) {
     super(message, 404);
   }
 };
-var UnauthorizedError = class extends ApiErrors {
+var UnauthenticatedError = class extends ApiErrors {
   constructor(message) {
     super(message, 401);
   }
 };
-var BadRequestValidationZod = class {
-  constructor(data, res) {
-    return res.status(400).json(data);
+var UnauthorizedError = class extends ApiErrors {
+  constructor(message) {
+    super(message, 403);
   }
 };
 
@@ -384,9 +389,9 @@ var errorsGlobalMiddleware = (error, req, res, next) => {
   if (error instanceof import_library.PrismaClientKnownRequestError) {
     if (error.code === "1001") {
       return res.status(500).json({
-        title: "Erro na base de dados",
+        title: "PrismaClientKnownRequestError",
         errorCode: error.code,
-        message: error.message
+        message: "Conex\xE3o com banco de dados falhou"
       });
     } else {
       return res.status(401).json({
@@ -398,16 +403,20 @@ var errorsGlobalMiddleware = (error, req, res, next) => {
   }
   if (error instanceof import_axios2.AxiosError) {
     if (error.code === "ECONNREFUSED") {
-      return res.status(500).json({ message: "Conex\xE3o com banco de dados falhou" });
+      return res.status(500).json({
+        title: "KeycloakConnectionError",
+        errorCode: 500,
+        message: "Conex\xE3o com banco de dados falhou"
+      });
     }
     if (error.code === "ERR_BAD_REQUEST") {
       return res.status(400).json({ message: "Credenciais inv\xE1lidas" });
     }
     if (error.code === "401") {
-      return new UnauthorizedError("Acesso negado");
+      return new UnauthenticatedError("Usu\xE1rio autenticado");
     }
     if (error.code === "403") {
-      return new UnauthorizedError("Usu\xE1rio n\xE3o autenticado");
+      return new UnauthorizedError("Usu\xE1rio n\xE3o autorizado");
     }
   }
   console.log("STACK TRACE", error);
