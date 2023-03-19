@@ -6,12 +6,7 @@ import { AxiosError } from 'axios';
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
-import {
-  ApiErrors,
-  errorsValidationZod,
-  UnauthenticatedError,
-  UnauthorizedError,
-} from '../helpers';
+import { ApiErrors, errorsValidationZod, UnauthorizedError } from '../helpers';
 
 export const errorsGlobalMiddleware = (
   error: Error & Partial<ApiErrors>,
@@ -20,13 +15,15 @@ export const errorsGlobalMiddleware = (
   next: NextFunction,
 ) => {
   const statusCode = error.statusCode ?? 500;
-  console.log('STATUS CODE ' + statusCode);
-  const message = error.statusCode ? error.message : 'Erro interno no servidor';
+
+  const message = error.statusCode ? error.message : 'Internal Server Error';
 
   if (error.code === '23505') {
-    return res
-      .status(400)
-      .json({ message: 'Cadastro já existente para o dado informado' });
+    return res.status(400).json({
+      title: 'Bad Request',
+      errorCode: 400,
+      message: 'existing registration for the given data',
+    });
   }
 
   if (error instanceof ZodError) {
@@ -36,8 +33,8 @@ export const errorsGlobalMiddleware = (
   if (error instanceof PrismaClientInitializationError) {
     return res.status(500).json({
       title: 'PrismaClientInitializationError',
-      errorCode: error.errorCode,
-      message: 'Erro na base de dados',
+      errorCode: 500,
+      message: 'database connection failed',
     });
   }
 
@@ -46,7 +43,7 @@ export const errorsGlobalMiddleware = (
       return res.status(500).json({
         title: 'PrismaClientKnownRequestError',
         errorCode: error.code,
-        message: 'Conexão com banco de dados falhou',
+        message: 'database connection failed',
       });
     } else {
       return res.status(401).json({
@@ -62,20 +59,30 @@ export const errorsGlobalMiddleware = (
       return res.status(500).json({
         title: 'KeycloakConnectionError',
         errorCode: 500,
-        message: 'Conexão com banco de dados falhou',
+        message: 'database connection failed',
       });
     }
 
     if (error.code === 'ERR_BAD_REQUEST') {
-      return res.status(400).json({ message: 'Credenciais inválidas' });
-    }
+      if (error.response?.data.error === 'invalid_grant') {
+        return res.status(401).json({
+          title: 'Bad Request',
+          errorCode: 401,
+          message: 'invalid_grant',
+        });
+      }
 
-    if (error.code === '401') {
-      return new UnauthenticatedError('Usuário autenticado');
+      if (error.response?.data.error === 'unauthorized_client') {
+        return res.status(401).json({
+          title: 'Bad Request',
+          errorCode: 401,
+          message: 'unauthorized_client',
+        });
+      }
     }
 
     if (error.code === '403') {
-      return new UnauthorizedError('Usuário não autorizado');
+      return new UnauthorizedError('unauthorized user');
     }
   }
 
