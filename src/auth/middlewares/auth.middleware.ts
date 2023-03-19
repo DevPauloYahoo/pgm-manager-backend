@@ -48,24 +48,32 @@ export function AuthMiddleware(userRoles: string[]) {
         resource_access: payload.resource_access,
       };
 
-      const { email, username } = result;
+      // const { email, username } = result;
 
       const rolesExistis = result.resource_access.pgm_manager.roles.some(
         (role) => userRoles.includes(role),
       );
 
-      if (rolesExistis) {
-        // @ts-ignore
-        req.user = {
-          username,
-          email,
-        };
-        next();
-      } else {
+      if (!rolesExistis) {
         res.status(403).json({
           message: 'Usuário não tem permissão para acessar esse recurso',
         });
       }
+
+      next();
+
+      // if (rolesExistis) {
+      //   // @ts-ignore
+      //   req.user = {
+      //     username,
+      //     email,
+      //   };
+      //   next();
+      // } else {
+      //   res.status(403).json({
+      //     message: 'Usuário não tem permissão para acessar esse recurso',
+      //   });
+      // }
     });
   };
 }

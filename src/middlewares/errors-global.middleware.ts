@@ -1,6 +1,6 @@
 import {
-  PrismaClientKnownRequestError,
   PrismaClientInitializationError,
+  PrismaClientKnownRequestError,
 } from '@prisma/client/runtime/library';
 import { AxiosError } from 'axios';
 import { NextFunction, Request, Response } from 'express';
@@ -31,16 +31,25 @@ export const errorsGlobalMiddleware = (
   if (error instanceof PrismaClientInitializationError) {
     return res.status(500).json({
       title: 'PrismaClientInitializationError',
+      errorCode: error.errorCode,
       message: 'Erro na base de dados',
     });
   }
 
   if (error instanceof PrismaClientKnownRequestError) {
-    return res.status(401).json({
-      title: 'PrismaClientKnownRequestError',
-      errorCode: error.code,
-      message: error.message,
-    });
+    if (error.code === '1001') {
+      return res.status(500).json({
+        title: 'Erro na base de dados',
+        errorCode: error.code,
+        message: error.message,
+      });
+    } else {
+      return res.status(401).json({
+        title: 'PrismaClientKnownRequestError',
+        errorCode: error.code,
+        message: error.message,
+      });
+    }
   }
 
   if (error instanceof AxiosError) {
@@ -63,6 +72,6 @@ export const errorsGlobalMiddleware = (
     }
   }
 
-  console.log('STACK TRACE', error.code);
+  console.log('STACK TRACE', error);
   return res.status(statusCode).json({ message: message });
 };
