@@ -37,8 +37,6 @@ export const listAll = async (req: Request, res: Response) => {
     prismaClient.visitor.count(),
   ]);
 
-  // const totalPages: number = Math.ceil(total / limit);
-
   const visitorResponse: TypeVisitorPaginator<VisitorDto> = {
     content: visitors,
     currentPage: page,
@@ -69,10 +67,23 @@ export const findByCPF = async (req: Request, res: Response) => {
   const visitorFound: TypeIsExistsCPF = await visitorService.findByCPF(
     cpfParam,
   );
-  //
-  // if (!visitorFound) {
-  //   return res.status(404).json({ message: 'Error' });
-  // }
 
   return res.status(200).json(visitorFound);
+};
+
+export const deleteVisitor = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const visitorFound = await visitorService.getOneVisitor(id);
+
+  if (!visitorFound) {
+    return res
+      .status(400)
+      .json({ message: `Visitante não encontrado para o ID: ${id}` });
+  }
+
+  await visitorService.deleteVisitor(visitorFound.id);
+
+  return res
+    .status(200)
+    .json({ message: `Visitante com ID: ${id} excluído com sucesso` });
 };

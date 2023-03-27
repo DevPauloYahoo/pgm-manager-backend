@@ -26,6 +26,11 @@ visitorRoutes
     '/visitors/:id',
     AuthMiddleware(['USER', 'ADMIN', 'GUEST']),
     resolver(visitorController.findOne),
+  )
+  .delete(
+    '/visitors/:id',
+    AuthMiddleware(['ADMIN']),
+    resolver(visitorController.deleteVisitor),
   );
 
 export default visitorRoutes;

@@ -75,3 +75,12 @@ export const findByCPF = (document: string) => {
     select: { document: true },
   });
 };
+
+export const deleteVisitor = (id: string) => {
+  console.log('ID', id);
+  return prismaClient.visitor.delete({
+    where: {
+      id,
+    },
+  });
+};
