@@ -23,6 +23,7 @@ model Visit {
   badge      String
   secretary  String
   status     Boolean? @default(false)
+  duration   Int?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   visitor_id String

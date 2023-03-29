@@ -1,9 +1,13 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 
-import {prismaClient} from '../../prisma/config/prisma.client';
-import {TypeVisitByBadgeResponse, TypeVisitByVisitorResponse, TypeVisitPaginator,} from '../@types';
-import {NotFoundError} from '../helpers';
-import {visitService} from './index';
+import { prismaClient } from '../../prisma/config/prisma.client';
+import {
+  TypeVisitByBadgeResponse,
+  TypeVisitByVisitorResponse,
+  TypeVisitPaginator,
+} from '../@types';
+import { NotFoundError } from '../helpers';
+import { visitService } from './index';
 import {
   createVisitSchema,
   createVisitToVisitorSchema,
@@ -13,7 +17,7 @@ import {
 export const createVisit = async (req: Request, res: Response) => {
   createVisitSchema.parse(req.body);
 
-  const {...visitDto} = req.body;
+  const { ...visitDto } = req.body;
   const visit = await visitService.createVisit({
     ...visitDto,
   });
@@ -24,11 +28,11 @@ export const createVisit = async (req: Request, res: Response) => {
 export const createVisitToVisitor = async (req: Request, res: Response) => {
   validationParamsVisitorSchema.parse(req.params);
 
-  const {id} = req.params;
+  const { id } = req.params;
 
   createVisitToVisitorSchema.parse(req.body);
 
-  const {...visitDto} = req.body;
+  const { ...visitDto } = req.body;
   Reflect.deleteProperty(visitDto, 'visitor_id');
 
   const newVisit = await visitService.createVisitToVisitor(visitDto, id);
@@ -39,7 +43,7 @@ export const createVisitToVisitor = async (req: Request, res: Response) => {
 export const updateStatus = async (req: Request, res: Response) => {
   validationParamsVisitorSchema.parse(req.params);
 
-  const {id} = req.params;
+  const { id } = req.params;
   const visitFound = await visitService.getOneVisit(id);
 
   if (!visitFound) {
@@ -47,6 +51,12 @@ export const updateStatus = async (req: Request, res: Response) => {
   }
 
   const visitUpdated = await visitService.updateStatus(id);
+
+  const dateInitial = new Date(visitUpdated.updated_at);
+  const dateEnd = new Date(visitUpdated.created_at);
+  const dateDiff = Math.abs(dateEnd.getTime() - dateInitial.getTime());
+  const result = Math.ceil(dateDiff / 60000);
+
   return res.status(200).json(visitUpdated);
 };
 
@@ -75,7 +85,7 @@ export const findAll = async (req: Request, res: Response) => {
 };
 
 export const findOne = async (req: Request, res: Response) => {
-  const {id} = req.params;
+  const { id } = req.params;
   const visitFound = await visitService.getOneVisit(id);
 
   if (!visitFound) {
@@ -89,7 +99,7 @@ export const findByStatusBadgeSecretary = async (
   req: Request,
   res: Response,
 ): Promise<Response<TypeVisitByBadgeResponse>> => {
-  const {badge, secretary} = req.query;
+  const { badge, secretary } = req.query;
 
   const visitFound = await visitService.getByStatusBadgeSecretary(
     badge as string,
@@ -99,7 +109,7 @@ export const findByStatusBadgeSecretary = async (
   if (!visitFound) {
     return res
       .status(200)
-      .json({statusVisit: false, visitId: '', badgeVisit: ''});
+      .json({ statusVisit: false, visitId: '', badgeVisit: '' });
   }
 
   return res.status(200).json({
@@ -126,7 +136,7 @@ export const findVisitByStatusAndVisitorId = async (
     });
   }
 
-  const {visitor, secretary, badge} = visitFound;
+  const { visitor, secretary, badge } = visitFound;
 
   return res.status(200).json({
     status: true,
@@ -137,14 +147,14 @@ export const findVisitByStatusAndVisitorId = async (
 };
 
 export const findBadgesBySecretary = async (req: Request, res: Response) => {
-  const {secretary} = req.query;
+  const { secretary } = req.query;
 
   const badgesFound = await visitService.getBadgesBySecretary(
     secretary as string,
   );
 
   if (!badgesFound) {
-    res.status(200).json({badgesFound: []});
+    res.status(200).json({ badgesFound: [] });
   }
 
   const results: string[] = [];
