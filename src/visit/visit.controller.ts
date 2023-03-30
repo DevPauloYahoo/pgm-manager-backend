@@ -50,12 +50,14 @@ export const updateStatus = async (req: Request, res: Response) => {
     throw new NotFoundError(`Atendimento não encontrado para o ID: ${id}`);
   }
 
-  const visitUpdated = await visitService.updateStatus(id);
+  const visitStatusUpdated = await visitService.updateStatus(id);
 
-  const dateInitial = new Date(visitUpdated.updated_at);
-  const dateEnd = new Date(visitUpdated.created_at);
+  const dateInitial = new Date(visitStatusUpdated.updated_at);
+  const dateEnd = new Date(visitStatusUpdated.created_at);
   const dateDiff = Math.abs(dateEnd.getTime() - dateInitial.getTime());
-  const result = Math.ceil(dateDiff / 60000);
+  const duration = Math.ceil(dateDiff / 60000);
+
+  const visitUpdated = visitService.updateDuration(id, duration);
 
   return res.status(200).json(visitUpdated);
 };

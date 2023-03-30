@@ -50,6 +50,13 @@ export const updateStatus = async (visitId: string) => {
   });
 };
 
+export const updateDuration = async (visitId: string, duration: number) => {
+  return prismaClient.visit.update({
+    where: { id: visitId },
+    data: { duration },
+  });
+};
+
 export const getAllVisits = (
   search: string,
   status: string | boolean,
@@ -64,6 +71,7 @@ export const getAllVisits = (
       secretary: true,
       created_at: true,
       updated_at: true,
+      duration: true,
       visitor: {
         select: {
           id: true,
