@@ -1,6 +1,6 @@
 **/.classpath
 **/.dockerignore
-**/.env
+# **/.env
 **/.git
 **/.gitignore
 **/.project
@@ -27,3 +27,4 @@ README.md
 .example.env
 pgm-manager-backend.iml
 .editorconfig
+node_modules

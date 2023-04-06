@@ -45,8 +45,14 @@ export const errorsGlobalMiddleware = (
         errorCode: error.code,
         message: 'database connection failed',
       });
+    } else if (error.code === 'P2021') {
+      return res.status(500).json({
+        title: 'PrismaClientKnownRequestError',
+        errorCode: error.code,
+        message: 'Table does not exist in the database',
+      });
     } else {
-      return res.status(401).json({
+      return res.status(500).json({
         title: 'PrismaClientKnownRequestError',
         errorCode: error.code,
         message: error.message,
@@ -60,6 +66,14 @@ export const errorsGlobalMiddleware = (
         title: 'KeycloakConnectionError',
         errorCode: 500,
         message: 'database connection failed',
+      });
+    }
+
+    if (error.code === 'ENOTFOUND') {
+      return res.status(500).json({
+        title: 'KeycloakConnectionError',
+        errorCode: 500,
+        message: 'keycloak offline',
       });
     }
 

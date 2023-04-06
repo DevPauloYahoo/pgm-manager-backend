@@ -1,8 +1,77 @@
 version: '3.9'
 
 services:
+  #  postgres:
+  #    image: postgres:latest
+  #    container_name: pgm-postgres
+  #    hostname: postgres
+  #    networks:
+  #      - pgm-manager-net
+  #    ports:
+  #      - "5432:5432"
+  #    environment:
+  #      POSTGRES_USER: postgres
+  #      POSTGRES_PASSWORD: postgres
+  #      POSTGRES_DB: db-pgm-manager
+  #    volumes:
+  #      - postgres-data:/var/lib/postgresql/data
+  #    restart: unless-stopped
+  #  
+  #  keycloak:
+  #    image: quay.io/keycloak/keycloak:19.0.3
+  #    container_name: pgm-keycloak
+  #    hostname: keycloak
+  #    networks:
+  #      - pgm-manager-net
+  #    ports:
+  #      - "8080:8080"
+  #    environment:
+  #      DB_VENDOR: POSTGRES
+  #      DB_ADDR: postgres
+  #      DB_DATABASE: keycloak
+  #      DB_USER: postgres
+  #      DB_SCHEMA: public
+  #      DB_PASSWORD: postgres
+  #      KEYCLOAK_ADMIN: admin
+  #      KEYCLOAK_ADMIN_PASSWORD: admin
+  #
+  #    depends_on:
+  #      - postgres
+  #    command:
+  #      - start-dev
+  
   pgm-manager-backend:
-    image: pgm-manager-backend
-    build: .
+    image: pgm-backend:v1
+    #    stdin_open: true
+    hostname: backend
+    container_name: backend
+    #    build:
+    #      context: .
+    #      dockerfile: Dockerfile
+    #    depends_on:
+    #      - postgres
+    #      - keycloak
+    networks:
+      - pgm-manager-net
     ports:
-      - 3000:3000
+      - "3000:3000"
+    restart: always
+  
+  pgm-manager-frontend:
+    image: pgm-frontend:v1
+    container_name: frontend
+    hostname: frontend
+    networks:
+      - pgm-manager-net
+    depends_on:
+      #      - keycloak
+      - pgm-manager-backend
+    ports:
+      - "8081:80"
+
+volumes:
+  postgres-data:
+
+networks:
+  pgm-manager-net:
+    driver: bridge
