@@ -1,0 +1,34 @@
+version: "3.9"
+
+networks:
+  pgmnetwork:
+    driver: bridge
+    name: pgmnetwork
+
+services:
+  backend:
+    image: pgm-backend:v1
+    hostname: pgm-backend
+    container_name: pgm-backend
+    env_file:
+      - keycloak.env
+#     # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    networks:
+      - pgm-net
+    ports:
+      - "3000:3000"
+    command: sh -c "npm run prisma:migrate && npm run start"
+
+  frontend:
+    image: pgm-frontend:v1
+    container_name: pgm-frontend
+    hostname: pgm-frontend
+    networks:
+      - pgm-net
+    depends_on:
+      - backend
+    ports:
+      - "8081:80"
+    command: npm start

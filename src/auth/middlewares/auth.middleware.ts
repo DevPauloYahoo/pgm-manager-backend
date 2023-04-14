@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError, TokenExpiredError, verify } from 'jsonwebtoken';
 
-const SECRET_KEY = process.env.PUBLIC_KEY || '';
+const SECRET_KEY = `-----BEGIN PUBLIC KEY-----\n${process.env.PUBLIC_KEY}\n-----END PUBLIC KEY-----`;
 
 interface PayloadResponse {
   username: string;

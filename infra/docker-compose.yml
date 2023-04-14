@@ -1,0 +1,51 @@
+version: '3.9'
+
+networks:
+  pgmnetwork:
+    name: pgmnetwork
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:15.2
+    container_name: pgm_postgres
+    hostname: pgm_postgres
+    networks:
+      - pgmnetwork
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: pgm_manager_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    image: pgm-backend:v1
+    hostname: pgm_backend
+    container_name: pgm_backend
+    env_file:
+      - keycloak.env
+    networks:
+      - pgmnetwork
+    depends_on:
+      - postgres
+    ports:
+      - 3000:3000
+    command: sh -c "npm run prisma:migrate && npm run start"
+
+  frontend:
+    image: pgm-frontend:v1
+    container_name: pgm_frontend
+    hostname: pgm_frontend
+    networks:
+      - pgmnetwork
+    depends_on:
+      - backend
+    ports:
+      - 8081:80
+
+volumes:
+  postgres_data:
+    name: postgres_data
