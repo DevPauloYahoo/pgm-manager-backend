@@ -63,8 +63,8 @@ export const updateStatus = async (req: Request, res: Response) => {
 };
 
 export const findAll = async (req: Request, res: Response) => {
-  const search = String(req.query.search || '');
-  const status = Boolean(req.query.status || false);
+  const search = String(req.query.search ?? '');
+  const status = Boolean(req.query.status ?? false);
   const page = +(req.query.page as string) || 1;
   const limit = +(req.query.limit as string) || 10;
   const skip = (page - 1) * limit;
@@ -73,8 +73,6 @@ export const findAll = async (req: Request, res: Response) => {
     visitService.getAllVisits(search, status, skip, limit),
     prismaClient.visit.count(),
   ]);
-
-  // const totalPages = Math.ceil(total / limit);
 
   const visitsResponse: TypeVisitPaginator<object> = {
     content: visits,
@@ -161,7 +159,7 @@ export const findBadgesBySecretary = async (req: Request, res: Response) => {
 
   const results: string[] = [];
 
-  badgesFound.forEach((value) => results.push(value.badge));
+  badgesFound.forEach((value: any) => results.push(value.badge));
 
   return res.status(200).json(results);
 };

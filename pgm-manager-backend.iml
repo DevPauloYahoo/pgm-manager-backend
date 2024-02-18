@@ -9,4 +9,7 @@
     <content url="file://$MODULE_DIR$/node_modules/.prisma" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="fa3252f5-6790-4512-8d14-16355cc57088" />
+  </component>
 </module>

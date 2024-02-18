@@ -1,3 +1,3 @@
-import { SignUpModel } from '../auth/sign-up/sign-up.model';
+import { UserModel } from '../auth/sign-up/user.model';
 
-export type SignUpType = Partial<SignUpModel>;
+export type SignUpType = Partial<UserModel>;
