@@ -63,10 +63,16 @@ export const updateStatus = async (req: Request, res: Response) => {
 };
 
 export const findAll = async (req: Request, res: Response) => {
-  const search = String(req.query.search ?? '');
-  const status = Boolean(req.query.status ?? false);
-  const page = +(req.query.page as string) || 1;
-  const limit = +(req.query.limit as string) || 10;
+  const { query } = req;
+  const search = query.search as string;
+  
+  let status = false;
+  if (query.status === 'true') {
+      status = !status;
+  }
+  
+  const page = +(query.page as string) || 1;
+  const limit = +(query.limit as string) || 10;
   const skip = (page - 1) * limit;
 
   const [visits, totalItems] = await prismaClient.$transaction([

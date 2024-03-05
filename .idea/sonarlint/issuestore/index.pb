@@ -93,8 +93,6 @@ R
 :
 
 infra/.env,5\9\5966ad98625bedd174bd2ed61a1c7307ee6d615d
-4
-.env,3\c\3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
 R
 "src/auth/sign-up/sign-up.routes.ts,a\4\a4520d9d35deb49aa9afce81be9f48390563717e
 S
@@ -138,3 +136,7 @@ A
 package-lock.json,f\a\fa288d1472d29beccb489a676f68739ad365fc47
 9
 	yarn.lock,5\3\53585a096fe3a3b96321113856ae62602995a33b
+4
+.env,3\c\3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
+L
+src/auth/role/role.schema.ts,e\4\e46c94908a52c8a7812ceeb7acde5a2526db7ecb
